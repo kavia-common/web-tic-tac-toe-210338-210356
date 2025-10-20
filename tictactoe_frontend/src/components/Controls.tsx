@@ -24,7 +24,7 @@ export default function Controls({ onReset, onNewGame, disabled }: Props) {
         type="button"
         className="ocean-btn ocean-btn-primary"
         onClick={onNewGame}
-        aria-label="Start a new game with X as next player"
+        aria-label="Start a new game with Knight as next player"
       >
         New Game
       </button>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Board from "@/components/Board";
 import StatusBar from "@/components/StatusBar";
 import Controls from "@/components/Controls";
@@ -62,6 +62,13 @@ export default function Home() {
     setXIsNext(true); // X always starts new game
     logAudit("NEW_GAME", { startingPlayer: "X" });
   };
+
+  // Minimal audit note regarding UI marker change (X->Knight, O->Queen)
+  useEffect(() => {
+    logAudit("UI_NOTE", { note: "UI markers updated to chess icons: X->Knight, O->Queen" });
+    // one-time notice on initial mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <main className="container-center">

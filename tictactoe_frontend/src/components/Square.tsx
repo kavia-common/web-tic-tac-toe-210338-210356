@@ -21,12 +21,42 @@ type Props = {
   index: number;
 };
 
+/**
+ * Renders a themed chess icon for the given marker value.
+ * - X -> Knight (♞)
+ * - O -> Queen (♛)
+ * Uses Unicode symbols to avoid external dependencies and maintains accessibility.
+ */
+function renderMarkerIcon(value: "X" | "O" | null): { icon: string; className: string; aria: string } {
+  if (value === "X") {
+    return {
+      icon: "♞",
+      className: "text-[var(--ocean-primary)]",
+      aria: "Knight",
+    };
+  }
+  if (value === "O") {
+    return {
+      icon: "♛",
+      className: "text-[var(--ocean-secondary)]",
+      aria: "Queen",
+    };
+  }
+  return {
+    icon: "",
+    className: "text-[var(--ocean-text)]",
+    aria: "empty",
+  };
+}
+
 export default function Square({ value, onClick, disabled, highlight, index }: Props) {
-  const label = value ? `Square ${index + 1}: ${value}` : `Square ${index + 1}: empty`;
+  const { icon, className, aria } = renderMarkerIcon(value);
+  const label = `Square ${index + 1}: ${aria}${value ? " move" : ""}`;
+
   return (
     <button
       type="button"
-      className={`ocean-square w-full aspect-square text-3xl sm:text-4xl font-extrabold rounded-xl flex items-center justify-center select-none ${
+      className={`ocean-square w-full aspect-square rounded-xl flex items-center justify-center select-none ${
         highlight ? "win-square" : ""
       }`}
       aria-label={label}
@@ -35,16 +65,13 @@ export default function Square({ value, onClick, disabled, highlight, index }: P
       disabled={disabled}
       data-index={index}
     >
+      {/* Keep icon sizing consistent across fonts and devices */}
       <span
-        className={`${
-          value === "X"
-            ? "text-[var(--ocean-primary)]"
-            : value === "O"
-            ? "text-[var(--ocean-secondary)]"
-            : "text-[var(--ocean-text)]"
-        } drop-shadow-[0_1px_0_rgba(255,255,255,0.6)]`}
+        className={`${className} icon-cell`}
+        aria-hidden={value ? "false" : "true"}
+        role={value ? "img" : undefined}
       >
-        {value ?? ""}
+        {icon}
       </span>
     </button>
   );
